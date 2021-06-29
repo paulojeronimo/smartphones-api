@@ -12,6 +12,9 @@ import com.paulojeronimo.smartphones_api.dao.SmartphoneRepository;
 @Component
 public class DummyData implements CommandLineRunner
 {
+   public static final Smartphone SamsungGalaxyS9 =
+      Smartphone.build("Samsung", "GalaxyS9", 2015);
+
    private final SmartphoneRepository repository;
 
    DummyData(SmartphoneRepository repository)
@@ -21,7 +24,7 @@ public class DummyData implements CommandLineRunner
 
    private Smartphone[] defaultSmartphones() {
       Smartphone[] array = {
-         Smartphone.build("Samsung", "GalaxyS9", 2015),
+         SamsungGalaxyS9,
          Smartphone.build("Samsung", "GalaxyS8", 2014),
          Smartphone.build("Samsung", "GalaxyS7", 2013),
          Smartphone.build("Motorola", "Nexus6", 2000),

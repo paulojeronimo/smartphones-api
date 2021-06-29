@@ -32,17 +32,13 @@ public class SmartphoneController
    }
 
    @GetMapping(value = "/smartphone/{id}")
-   public Mono<Smartphone> findById(
-      @PathVariable
-         String id)
+   public Mono<Smartphone> findById(@PathVariable String id)
    {
       return service.findById(id);
    }
 
    @PostMapping(value = "/smartphone")
-   public Mono<Smartphone> save(
-      @RequestBody
-         Smartphone smartphone)
+   public Mono<Smartphone> save(@RequestBody Smartphone smartphone)
    {
       return service.save(smartphone);
    }
