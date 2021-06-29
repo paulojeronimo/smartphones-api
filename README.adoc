@@ -1,0 +1,82 @@
+= Smartphones API
+Paulo Jerônimo <paulojeronimo@gmail.com>, {localdatetime}
+:numbered:
+:nofooter:
+
+:uri-project-reactor: https://projectreactor.io/
+:uri-spring-webflux: https://spring.getdocs.org/en-US/spring-framework-docs/docs/spring-web-reactive/webflux/webflux.html
+
+== What is this?
+
+This is an example application that shows you a reactive API written in
+Java (and Kotlin) using {uri-spring-webflux}[Spring WebFlux^].
+
+== Prerequisites
+
+. https://www.mongodb.com/community[MongoDB^] installed.
+. JDK installed.
+. Maven installed.
+
+[NOTE]
+.Versions tested with this example:
+====
+....
+$ java -version
+openjdk version "1.8.0_282"
+OpenJDK Runtime Environment (build 1.8.0_282-bre_2021_01_20_16_37-b00)
+OpenJDK 64-Bit Server VM (build 25.282-b00, mixed mode)
+
+$ mvn -v
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+Maven home: /opt/foton/tools/sdkman/candidates/maven/current
+Java version: 1.8.0_282, vendor: Oracle Corporation, runtime:
+/usr/local/Cellar/openjdk@8/1.8.0+282/libexec/openjdk.jdk/Contents/Home/jre
+Default locale: en_BR, platform encoding: UTF-8
+OS name: "mac os x", version: "10.15.7", arch: "x86_64", family: "mac"
+
+$ mongo --version
+MongoDB shell version v4.2.0
+git version: a4b751dcf51dd249c5865812b390cfd1c0129c30
+allocator: system
+modules: none
+build environment:
+    distarch: x86_64
+    target_arch: x86_64
+....
+////
+$ brew services list
+Name              Status  User Plist
+mongodb-community started pj
+/Users/pj/Library/LaunchAgents/homebrew.mxcl.mongodb-community.plist
+////
+====
+
+== Running
+
+----
+$ mvn spring-boot:run
+----
+
+== Testing (using curl)
+
+[source,bash,subs="attributes+"]
+----
+$ # Get all smartphones:
+$ curl http://localhost:8080/smartphone
+
+$ # Get a specific smartphone:
+$ curl http://localhost:8080/smartphone/SamsungGalaxyS9
+
+$ # Get a streams of smartphones (via {uri-project-reactor}[Project Reactor]):
+$ curl http://localhost:8080/smartphone/webflux
+----
+
+== TODO
+
+. Unit tests.
+. Dockerization.
+. API documentation using the https://swagger.io/specification/[OpenAPI
+  Specification].
+. Another microservice that books a smartphone to a user using this
+  microservice (in Kotlin 1.5 version).
+. ...
