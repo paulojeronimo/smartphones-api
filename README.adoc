@@ -71,12 +71,54 @@ $ # Get a streams of smartphones (via {uri-project-reactor}[Project Reactor]):
 $ curl http://localhost:8080/smartphone/webflux
 ----
 
-== TODO
+Booking test:
 
-. Unit tests.
+----
+$ ./test-booking.sh
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user1
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.646","returnTime":null,"status":"BOOKED"}
+expected for above: BOOKED
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user1
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.646","returnTime":null,"status":"ALREADY_BOOKED"}
+expected for above: ALREADY_BOOKED
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user2
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.646","returnTime":null,"status":"BOOKED_BY_ANOTHER_USER"}
+expected for above: BOOKED_BY_ANOTHER_USER
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user1/release
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.833","returnTime":"2021-06-29T21:40:14.833","status":"RELEASED"}
+expected for above: RELEASED
+
++ curl http://localhost:8080/booking
+[{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.833","returnTime":"2021-06-29T21:40:14.833","status":"RELEASED"}]
+expected for above: a list of bookings
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user1
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.883","returnTime":null,"status":"BOOKED"}
+expected for above: BOOKED
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user1
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.883","returnTime":null,"status":"ALREADY_BOOKED"}
+expected for above: ALREADY_BOOKED
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user1/release
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user1","bookingTime":"2021-06-29T21:40:14.918","returnTime":"2021-06-29T21:40:14.918","status":"RELEASED"}
+expected for above: ALREADY_BOOKED
+
++ curl http://localhost:8080/booking/SamsungGalaxyS9/user2
+{"smartPhoneId":"SamsungGalaxyS9","userId":"user2","bookingTime":"2021-06-29T21:40:14.934","returnTime":null,"status":"BOOKED"}
+expected for above: BOOKED
+----
+
+== TODOs
+
+. More unit tests.
 . Dockerization.
 . API documentation using the https://swagger.io/specification/[OpenAPI
   Specification].
-. Another microservice that books a smartphone to a user using this
-  microservice (in Kotlin 1.5 version).
+. Separate microservices.
+. Many refactorings.
+. Migrate to Kotlin 1.5.20.
 . ...

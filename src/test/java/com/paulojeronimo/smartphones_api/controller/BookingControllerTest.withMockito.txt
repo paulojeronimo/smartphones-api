@@ -1,0 +1,77 @@
+// TODO: Fix this test
+// Reference: https://www.baeldung.com/webflux-webclient-parameters
+package com.paulojeronimo.smartphones_api.controller;
+
+import reactor.core.publisher.Mono;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.client.ClientRequest;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.ExchangeFunction;
+import org.springframework.web.reactive.function.client.WebClient;
+import com.paulojeronimo.smartphones_api.model.DummyData;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
+@AutoConfigureWebTestClient
+@ActiveProfiles("test")
+@DirtiesContext
+public class BookingControllerTest
+{
+   private static final String BASE_URL = "https://example.com";
+
+   @Autowired
+   private WebTestClient webTestClient;
+
+   private WebClient webClient;
+
+   @Captor
+   private ArgumentCaptor<ClientRequest> argumentCaptor;
+
+   private ExchangeFunction exchangeFunction;
+
+   @BeforeEach
+   public void init() {
+      MockitoAnnotations.initMocks(this);
+      exchangeFunction = mock(ExchangeFunction.class);
+      ClientResponse mockResponse = mock(ClientResponse.class);
+      when(exchangeFunction.exchange(argumentCaptor.capture())).thenReturn(
+         Mono.just(mockResponse));
+      webClient = WebClient
+         .builder()
+         .baseUrl(BASE_URL)
+         .exchangeFunction(exchangeFunction)
+         .build();
+   }
+
+   private void verifyCalledUrl(String relativeUrl) {
+      ClientRequest request = argumentCaptor.getValue();
+      assertEquals(String.format("%s%s", BASE_URL, relativeUrl), request.url().toString());
+      Mockito.verify(exchangeFunction).exchange(request);
+      verifyNoMoreInteractions(exchangeFunction);
+   }
+
+   @Test
+   public void book_a_smartphone() {
+      webClient.get()
+         .uri(uriBuilder -> uriBuilder
+            .path("/book/{smartphoneId}/{userId}")
+            .build(DummyData.SamsungGalaxyS9.getId(), "user1"))
+         .exchange();
+      verifyCalledUrl("/book/SamsumgGalaxy9/user1");
+   }
+}
