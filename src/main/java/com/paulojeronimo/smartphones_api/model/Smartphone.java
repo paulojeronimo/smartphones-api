@@ -25,4 +25,8 @@ public class Smartphone
       String id = manufacturer + model;
       return new Smartphone(id, manufacturer, model, year);
    }
+
+   public static Smartphone build(String manufacturer, String model) {
+      return Smartphone.build(manufacturer, model, 2010);
+   }
 }

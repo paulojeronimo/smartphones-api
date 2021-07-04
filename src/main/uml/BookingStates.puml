@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/state-diagram
+'https://softwareengineering.stackexchange.com/questions/349998/how-should-state-machines-handle-exceptions-in-actions
+
+NOT_BOOKED --> BOOKED: /booking/smartphoneId/userId
+NOT_BOOKED --> NOT_POSSIBLE
+
+BOOKED --> RELEASED: /booking/smartphoneId/userId/release
+BOOKED --> ALREADY_BOOKED
+BOOKED --> BOOKED_BY_ANOTHER
+BOOKED --> NOT_POSSIBLE
+
+RELEASED --> BOOKED_BY_ANOTHER
+RELEASED --> NOT_BOOKED
+RELEASED --> NOT_POSSIBLE
+
+NOT_POSSIBLE: Exception returned when smartphoneId is not found
+
+ALREADY_BOOKED: Exception that does not really change the state!
+ALREADY_BOOKED: It's returned when userId is equals Booked.userId
+
+BOOKED_BY_ANOTHER: Exception that does not really change the state!
+BOOKED_BY_ANOTHER: It's returned when userId isn't equals Booked.userId
+
+@enduml
